@@ -1,0 +1,31 @@
+# Recruitment Automation Dashboard — dependencies
+# This file grows phase by phase. Every entry below is used by code that
+# actually exists in the project right now (Phase 1 — Foundation).
+
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+streamlit==1.40.2
+sqlalchemy==2.0.36
+pydantic==2.10.3
+pydantic-settings==2.6.1
+python-dotenv==1.0.1
+httpx==0.28.1
+pytest==8.3.4
+python-multipart==0.0.20
+pyperclip==1.11.0  # Phase 7 — Facebook Assistant clipboard copy. Needs xclip or
+                   # xsel on Linux (see README's Facebook Assistant section);
+                   # nothing extra on Windows or macOS. Stdlib webbrowser (also
+                   # used by Phase 7) needs no package at all.
+Pillow==11.1.0     # Phase 9 — TikTok recruitment visual generator. Pinned <12
+                   # to match Streamlit 1.40.2's own pillow<12 constraint.
+arabic-reshaper==3.0.1  # Phase 9 — Arabic contextual letter shaping for the
+                        # visual generator. Needed because Pillow's own
+                        # complex-text engine (raqm) isn't reliably available
+                        # on Windows wheels — see visual_generator.py's
+                        # module docstring and PROJECT_STATUS.md section 15.
+python-bidi==0.6.11     # Phase 9 — pairs with arabic-reshaper for correct
+                        # right-to-left display order; same reason as above.
+apscheduler==3.11.3     # Phase 10 — periodic ticker over the posts table
+                        # (not a persistent job store — see PROJECT_STATUS.md
+                        # section 18). Every test disables it via
+                        # SCHEDULER_ENABLED=false (see settings.py).
