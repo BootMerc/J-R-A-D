@@ -19,6 +19,6 @@
 
 <div align="center">
 
-Built phase by phase, with a real test suite and a real bug list — not a demo.
+this will be built phase by phase, with a real test.
 
 </div>
