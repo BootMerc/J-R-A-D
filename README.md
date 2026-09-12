@@ -11,6 +11,7 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](docs/SETUP.md)
 [![Tests](https://img.shields.io/badge/tests-35(so%20far)%20passing-brightgreen)](docs/SETUP.md#running-tests)
+
 [Overview](#-overview) • [Features](#-features) • [Screenshots](#-screenshots) • [Architecture](#-architecture) • [Engineering Highlights](#-engineering-highlights) • [Getting Started](#-getting-started)
 
 </div>
