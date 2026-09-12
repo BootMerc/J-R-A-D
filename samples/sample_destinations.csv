@@ -1,0 +1,21 @@
+platform,name,url,category,location,audience,language,posting_method,active,notes,tags
+Facebook,Cairo Jobs Community,https://facebook.com/groups/example-cairo-jobs,Call Center,Cairo,Job seekers,English,Browser-assisted,true,Large general jobs group,Cairo|Call Center|English Jobs
+Facebook,Giza Fresh Graduates Hiring,https://facebook.com/groups/example-giza-grads,Fresh Graduates,Giza,Recent graduates,Arabic,Browser-assisted,true,,Giza|Fresh Graduates|Arabic Jobs
+Facebook,Alexandria IT Careers,https://facebook.com/groups/example-alex-it,IT Jobs,Alexandria,Tech professionals,English,Browser-assisted,true,,Alexandria|IT Jobs|English Jobs
+Facebook,Sharm El Sheikh Hospitality Jobs,https://facebook.com/groups/example-sharm-hosp,Hospitality,Sharm El Sheikh,Hotel and tourism staff,English,Browser-assisted,true,,Sharm El Sheikh|Hospitality
+Facebook,Remote Work Egypt,https://facebook.com/groups/example-remote-eg,Remote Jobs,Remote,Remote workers,Bilingual,Browser-assisted,true,,Remote Jobs|Bilingual
+Facebook,Cairo Call Center Vacancies,https://facebook.com/groups/example-cairo-cc,Call Center,Cairo,Call center agents,Arabic,Browser-assisted,true,,Cairo|Call Center|Arabic Jobs
+Facebook,Giza Sales and Marketing Jobs,https://facebook.com/groups/example-giza-sales,Sales,Giza,Sales professionals,English,Browser-assisted,true,,Giza|Sales
+Facebook,Alexandria Fresh Graduates,https://facebook.com/groups/example-alex-grads,Fresh Graduates,Alexandria,Recent graduates,Bilingual,Browser-assisted,true,,Alexandria|Fresh Graduates
+Facebook,Egypt English Speaking Jobs,https://facebook.com/groups/example-eg-english,English Jobs,Cairo,English speakers,English,Browser-assisted,true,,English Jobs|Cairo
+Facebook,Cairo Customer Service Careers,https://facebook.com/groups/example-cairo-cs,Call Center,Cairo,Customer service reps,English,Browser-assisted,true,,Cairo|Call Center|English Jobs
+Telegram,Cairo Jobs Channel,https://t.me/example_cairo_jobs,Call Center,Cairo,Job seekers,Arabic,API,true,Bot already added as admin,Cairo|Call Center|Arabic Jobs
+Telegram,Egypt Tech Careers,https://t.me/example_eg_tech,IT Jobs,Cairo,Tech professionals,English,API,true,,IT Jobs|Cairo|English Jobs
+Telegram,Alexandria Vacancies,https://t.me/example_alex_vac,General,Alexandria,General job seekers,Arabic,API,true,,Alexandria|Arabic Jobs
+Telegram,Remote Jobs Egypt,https://t.me/example_remote_eg,Remote Jobs,Remote,Remote workers,Bilingual,API,true,,Remote Jobs
+Telegram,Giza Hiring Now,https://t.me/example_giza_hiring,Call Center,Giza,Job seekers,Arabic,API,true,,Giza|Call Center|Arabic Jobs
+Telegram,Fresh Grads Egypt,https://t.me/example_fresh_grads,Fresh Graduates,Cairo,Recent graduates,Bilingual,API,true,,Fresh Graduates|Cairo
+Telegram,Sharm Hospitality Careers,https://t.me/example_sharm_hosp,Hospitality,Sharm El Sheikh,Hotel and tourism staff,English,API,true,,Sharm El Sheikh|Hospitality
+TikTok,Cairo Careers TikTok,https://tiktok.com/@example_cairo_careers,General,Cairo,Young job seekers,Arabic,Manual,true,No API access yet,Cairo|Fresh Graduates
+TikTok,Egypt Jobs Daily,https://tiktok.com/@example_eg_jobs_daily,General,Cairo,General audience,Bilingual,Manual,true,,Cairo|Bilingual
+TikTok,Alexandria Hiring Hub,https://tiktok.com/@example_alex_hiring,General,Alexandria,General audience,Arabic,Manual,true,,Alexandria|Arabic Jobs
