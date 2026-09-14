@@ -1,7 +1,5 @@
-"""Destinations API. Specific string routes (filter-options, import-csv,
-export-csv) are declared before the /{destination_id} route so an int-typed
-path param can never shadow them.
-"""
+# Keep specific routes before /{destination_id} so they don't get treated as IDs.
+# This includes filter-options, import-csv, and export-csv.
 
 from typing import Optional
 
