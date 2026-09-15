@@ -196,58 +196,94 @@ if total == 0:
             "logs/app.log for a seeding error; otherwise, use the form above to add one."
         )
 else:
-    st.caption(f"{total} template{'s' if total != 1 else ''} found")
+        st.caption(f"{total} template{'s' if total != 1 else ''} found")
 
+        # --- BULK DELETE UI ---
+        # Check session_state to find checked templates on the current page
+        selected_ids = [
+            t["id"] for t in templates
+            if st.session_state.get(f"bulk_sel_{t['id']}", False)
+        ]
+
+        if selected_ids:
+            bulk_col1, bulk_col2 = st.columns([0.7, 0.3])
+            with bulk_col1:
+                st.warning(f"**{len(selected_ids)} template(s) selected.** This action cannot be undone.")
+            with bulk_col2:
+                if st.button("Delete Selected", type="primary", use_container_width=True):
+                    for t_id in selected_ids:
+                        try:
+                            delete(f"/templates/{t_id}")
+                            # Clean up session state so the checkbox doesn't persist
+                            st.session_state.pop(f"bulk_sel_{t_id}", None)
+                        except APIError as exc:
+                            st.error(f"Error deleting template {t_id}: {exc}")
+                    
+                    st.success("Deleted selected templates.")
+                    st.rerun()
+            st.write("") # Small spacer before the list
+
+# --- TEMPLATE LISTING ---
 for template in templates:
     status_tag = "active" if template["active"] else "inactive"
     language_tag = f" · {template['language']}" if template.get("language") else ""
-    with st.expander(f"{template['name']} — {template['platform']}{language_tag} · {status_tag}"):
-        st.text(template["template_text"])
+    
+    # Split layout: 5% width for the checkbox, 95% for the expander
+    col_chk, col_exp = st.columns([0.05, 0.95], gap="small")
+    
+    with col_chk:
+        st.write("\n\n") # Vertical padding to align checkbox with the expander header
+        st.checkbox("Select", key=f"bulk_sel_{template['id']}", label_visibility="collapsed")
+        
+    with col_exp:
+        with st.expander(f"{template['name']} — {template['platform']}{language_tag} · {status_tag}"):
+            st.text(template["template_text"])
 
-        if template["unknown_variables"]:
-            st.warning(
-                "Unrecognized variables: "
-                + ", ".join("{{" + v + "}}" for v in template["unknown_variables"])
-            )
+            if template["unknown_variables"]:
+                st.warning(
+                    "Unrecognized variables: "
+                    + ", ".join("{{" + v + "}}" for v in template["unknown_variables"])
+                )
 
-        if st.session_state.confirm_delete_template_id == template["id"]:
-            st.warning(f"Delete '{template['name']}'? This can't be undone.")
-            cc1, cc2 = st.columns(2)
-            if cc1.button("Yes, delete", key=f"confirm_del_tpl_{template['id']}"):
-                try:
-                    delete(f"/templates/{template['id']}")
+            # --- RETAIN EXISTING BUTTON LOGIC BELOW ---
+            if st.session_state.confirm_delete_template_id == template["id"]:
+                st.warning(f"Delete '{template['name']}'? This can't be undone.")
+                cc1, cc2 = st.columns(2)
+                if cc1.button("Yes, delete", key=f"confirm_del_tpl_{template['id']}"):
+                    try:
+                        delete(f"/templates/{template['id']}")
+                        st.session_state.confirm_delete_template_id = None
+                        st.success("Deleted.")
+                        st.rerun()
+                    except APIError as exc:
+                        st.error(str(exc))
+                if cc2.button("Cancel", key=f"cancel_del_tpl_{template['id']}"):
                     st.session_state.confirm_delete_template_id = None
-                    st.success("Deleted.")
                     st.rerun()
-                except APIError as exc:
-                    st.error(str(exc))
-            if cc2.button("Cancel", key=f"cancel_del_tpl_{template['id']}"):
-                st.session_state.confirm_delete_template_id = None
-                st.rerun()
-        else:
-            c1, c2, c3 = st.columns(3)
-            if c1.button("Edit", key=f"edit_tpl_{template['id']}"):
-                st.session_state.editing_template_id = template["id"]
-                st.rerun()
-
-            if template["active"]:
-                if c2.button("Deactivate", key=f"deactivate_tpl_{template['id']}"):
-                    try:
-                        post(f"/templates/{template['id']}/deactivate")
-                        st.rerun()
-                    except APIError as exc:
-                        st.error(str(exc))
             else:
-                if c2.button("Activate", key=f"activate_tpl_{template['id']}"):
-                    try:
-                        post(f"/templates/{template['id']}/activate")
-                        st.rerun()
-                    except APIError as exc:
-                        st.error(str(exc))
+                c1, c2, c3 = st.columns(3)
+                if c1.button("Edit", key=f"edit_tpl_{template['id']}"):
+                    st.session_state.editing_template_id = template["id"]
+                    st.rerun()
 
-            if c3.button("Delete", key=f"del_tpl_{template['id']}"):
-                st.session_state.confirm_delete_template_id = template["id"]
-                st.rerun()
+                if template["active"]:
+                    if c2.button("Deactivate", key=f"deactivate_tpl_{template['id']}"):
+                        try:
+                            post(f"/templates/{template['id']}/deactivate")
+                            st.rerun()
+                        except APIError as exc:
+                            st.error(str(exc))
+                else:
+                    if c2.button("Activate", key=f"activate_tpl_{template['id']}"):
+                        try:
+                            post(f"/templates/{template['id']}/activate")
+                            st.rerun()
+                        except APIError as exc:
+                            st.error(str(exc))
+
+                if c3.button("Delete", key=f"del_tpl_{template['id']}"):
+                    st.session_state.confirm_delete_template_id = template["id"]
+                    st.rerun()
 
 # --- Pagination ---
 render_pagination_controls(total, PAGE_SIZE, "templates_page")
