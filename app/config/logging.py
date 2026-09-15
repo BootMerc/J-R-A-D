@@ -1,9 +1,9 @@
-"""Application-wide logging configuration.
-
-Writes to logs/app.log (rotating, so it never grows unbounded) and to the
-console. Secrets (bot tokens, API keys) must never be passed to log calls —
-that rule applies to every module added in later phases, not just this one.
-"""
+# Application-wide logging setup.
+#
+# Logs are written to logs/app.log with rotation to prevent the file
+# from growing indefinitely, and also printed to the console.
+#
+# Never log secrets such as bot tokens or API keys anywhere in the app.
 
 import logging
 import logging.handlers
