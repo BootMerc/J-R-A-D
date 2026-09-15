@@ -1,7 +1,8 @@
-"""Jobs API: create, read, search/filter/paginate, update, duplicate,
-close, archive/unarchive. Error handling (404 / 400) is centralized as
-global exception handlers in app/main.py, not repeated per endpoint.
-"""
+# Jobs API — handles creating, reading, searching/filtering/paginating,
+# updating, duplicating, closing, and archiving/unarchiving jobs.
+#
+# 404/400 errors are handled by the global exception handlers in app/main.py
+# instead of being repeated in each endpoint.
 
 from typing import Optional
 
