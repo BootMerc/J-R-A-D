@@ -1,17 +1,13 @@
-"""Phase 8 — Telegram: a plain HTTPS call against the Bot API, not the
-`python-telegram-bot` package (see PROJECT_STATUS.md section 14 — that
-library is built around *receiving* updates via polling/webhooks; this
-project only ever sends, so the full framework is unneeded weight).
-
-send_message() is the only function here and, like
-app/integrations/facebook/assistant.py's functions, never raises — every
-failure mode (no token configured, no chat_id configured, Telegram's own
-{"ok": false, "description": ...} envelope, a network error, a timeout, an
-unparseable response) becomes (False, None, "<human-readable reason>")
-instead of an exception. PostService.send_telegram_post() stores that
-reason directly as the post's error_message, so it needs to already read
-naturally — not a repr() of an exception.
-"""
+# Uses a simple HTTPS request to the Telegram Bot API instead of the
+# python-telegram-bot package. The project only sends messages, so the
+# full framework isn't needed.
+#
+# send_message() handles all failures itself and never raises. Missing
+# configuration, Telegram API errors, network/timeout issues, or invalid
+# responses are returned as a simple (False, None, reason) result.
+#
+# The error message is stored directly by PostService, so the reason should
+# be clear and human-readable rather than a raw exception or repr().
 
 import logging
 from typing import Optional
