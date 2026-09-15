@@ -1,9 +1,8 @@
-"""Central application configuration.
-
-All configuration is read from environment variables (optionally via a local
-.env file). Nothing here is ever hard-coded to a secret value — see
-.env.example for the full list of supported variables.
-"""
+# Central application configuration.
+#
+# All settings come from environment variables, optionally loaded from
+# a local .env file. Secrets are never hard-coded here.
+# See .env.example for the full list of supported variables.
 
 from functools import lru_cache
 from pathlib import Path
