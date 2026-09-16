@@ -1,12 +1,13 @@
-"""Calendar page — Phase 10's week-at-a-glance view of scheduled_at across
-posts of any status. Read-only: no actions live here, since every action
-a post might need (Start/Send/Schedule/Mark Posted/...) already has a home
-on the Queue page — this page exists purely to answer "what's happening
-when," not to duplicate the Queue page's controls.
-
-Same pattern as the other pages: talks to the backend only through
-frontend/components/api_client.py.
-"""
+# Calendar page — shows a week-at-a-glance view of scheduled_at across
+# posts of any status.
+#
+# This page is read-only. Post actions like Start, Send, Schedule, and
+# Mark Posted are handled on the Queue page, so we don't duplicate them here.
+#
+# The goal is simply to answer "what's happening when?"
+#
+# As with the other pages, all backend communication goes through
+# frontend/components/api_client.py.
 
 import sys
 from datetime import datetime, timedelta
