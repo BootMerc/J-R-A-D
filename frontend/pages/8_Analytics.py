@@ -1,10 +1,10 @@
-"""Analytics page — Phase 11's manual metrics logging and reporting.
-
-There's no automated metrics collection anywhere in this project (see
-app/services/analytics_service.py's module docstring for why) — every
-number here is something the user typed in. Talks to the backend only
-through frontend/components/api_client.py.
-"""
+# Analytics page — handles manual metrics logging and reporting.
+#
+# There is no automated metrics collection in the project. Every metric
+# shown here is entered manually by the user.
+#
+# As with the other pages, all backend communication goes through
+# frontend/components/api_client.py.
 
 import sys
 from datetime import date, timedelta
