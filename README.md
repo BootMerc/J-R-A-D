@@ -67,8 +67,7 @@ No CAPTCHA solving. No stealth automation. No bypassing rate limits. If a platfo
 
 ### Real system output: the TikTok visual generator
 
-These aren't mockups — they're the actual PNG files this project's `visual_generator.py` produces, generated fresh for this README.
-
+These aren't mockups — they're the actual PNG files this project's `visual_generator.py` produces.
 <table>
 <tr>
 <td width="50%" align="center">
