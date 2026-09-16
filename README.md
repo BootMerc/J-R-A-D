@@ -63,3 +63,50 @@ No CAPTCHA solving. No stealth automation. No bypassing rate limits. If a platfo
 
 ---
 
+## 🖼️ Screenshots
+
+### Real system output: the TikTok visual generator
+
+These aren't mockups — they're the actual PNG files this project's `visual_generator.py` produces, generated fresh for this README.
+
+<table>
+<tr>
+<td width="50%" align="center">
+
+**English**
+
+<img src="docs/images/tiktok-visual-english.png" width="280" alt="Generated recruitment visual, English"/>
+
+</td>
+<td width="50%" align="center">
+
+**Arabic (right-to-left)**
+
+<img src="docs/images/tiktok-visual-arabic.png" width="280" alt="Generated recruitment visual, Arabic"/>
+
+</td>
+</tr>
+</table>
+
+The Arabic version is the harder engineering problem than it looks — see [Engineering Highlights](#-engineering-highlights) below for why Pillow's *automatic* Arabic text handling can't be trusted on Windows, and how this was actually verified rather than assumed.
+
+<details>
+<summary><b>📸 App screenshots — add your own here</b></summary>
+
+<br>
+
+This README was written in an environment that can't run a real Windows/browser session to capture the actual Streamlit UI. The app has 8 pages — after running it locally (see [Getting Started](#-getting-started)), drop screenshots into `docs/images/` and reference them here:
+
+```markdown
+![Dashboard](docs/images/dashboard.png)
+![Queue page](docs/images/queue.png)
+![Facebook Assistant](docs/images/facebook-assistant.png)
+![Analytics](docs/images/analytics.png)
+```
+
+Good ones to capture: the **Dashboard** (landing page), **Queue** (with a few posts in different statuses — Queued/Processing/Posted look good together), the **Facebook Assistant** mid-flow, and **Analytics** with a few metrics logged so the funnel chart isn't empty.
+
+</details>
+
+---
+
