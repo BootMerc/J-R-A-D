@@ -1,8 +1,7 @@
-"""FastAPI backend entrypoint.
-
-Run with: uvicorn app.main:app --reload --port 8000
-(run.bat does this for you)
-"""
+# FastAPI backend entrypoint.
+#
+# Run with: uvicorn app.main:app --reload --port 8000
+# (run.bat does this for you)
 
 import logging
 from contextlib import asynccontextmanager
