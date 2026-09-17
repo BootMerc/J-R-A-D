@@ -100,9 +100,53 @@ This README was written in an environment that can't run a real Windows/browser 
 ![Queue page](docs/images/queue.png)
 ![Facebook Assistant](docs/images/facebook-assistant.png)
 
-Good ones to capture: the **Dashboard** (landing page), **Queue** (with a few posts in different statuses — Queued/Processing/Posted look good together), the **Facebook Assistant** mid-flow, and **Analytics** with a few metrics logged so the funnel chart isn't empty.
 
 </details>
 
 ---
 
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    User(["👤 Recruiter"])
+    
+    subgraph Frontend["Streamlit Frontend — 8 pages"]
+        UI["Jobs · Destinations · Templates · Post Creator<br/>Queue · Facebook Assistant · Calendar · Analytics"]
+    end
+    
+    subgraph Backend["FastAPI Backend — 55 endpoints"]
+        API["Repository → Service → API layers"]
+        SCHED["⏱️ Background Scheduler<br/>(APScheduler)"]
+    end
+    
+    DB[("🗄️ SQLite<br/>6 tables")]
+    
+    subgraph Integrations["Platform Integrations"]
+        FB["📘 Facebook<br/>webbrowser + clipboard"]
+        TG["✈️ Telegram<br/>Bot API (httpx)"]
+        TT["🎵 TikTok<br/>Pillow visual generator"]
+    end
+
+    User -->|"HTTP :8501"| UI
+    UI -->|"HTTP :8000"| API
+    API --> DB
+    SCHED -.->|"checks every 60s"| DB
+    API --> FB
+    API --> TG
+    API --> TT
+    SCHED ==>|"auto-sends due posts"| TG
+    
+    FB -.->|"you click Post"| FBWeb(["facebook.com"])
+    TG ==>|"fully automated"| TGWeb(["Telegram servers"])
+    TT -.->|"you post from your phone"| TTWeb(["TikTok app"])
+
+    style TG fill:#0088cc,color:#fff
+    style FB fill:#8b8b8b,color:#fff
+    style TT fill:#8b8b8b,color:#fff
+    style DB fill:#003b57,color:#fff
+    style SCHED fill:#ffa726,color:#000
+```
+
+Solid arrows (`==>`) are fully automated; dashed arrows (`-.->`) are the human-in-the-loop steps — deliberately, not as a limitation
