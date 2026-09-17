@@ -96,12 +96,11 @@ The Arabic version is the harder engineering problem than it looks — see [Engi
 
 This README was written in an environment that can't run a real Windows/browser session to capture the actual Streamlit UI. The app has 8 pages — after running it locally (see [Getting Started](#-getting-started)), drop screenshots into `docs/images/` and reference them here:
 
-```markdown
 ![Dashboard](main/docs/images/dashboard.png)
 ![Queue page](images/queue.png)
 ![Facebook Assistant](docs/images/facebook-assistant.png)
 ![Analytics](docs/images/analytics.png)
-```
+
 
 Good ones to capture: the **Dashboard** (landing page), **Queue** (with a few posts in different statuses — Queued/Processing/Posted look good together), the **Facebook Assistant** mid-flow, and **Analytics** with a few metrics logged so the funnel chart isn't empty.
 
