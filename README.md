@@ -97,7 +97,7 @@ The Arabic version is the harder engineering problem than it looks — see [Engi
 This README was written in an environment that can't run a real Windows/browser session to capture the actual Streamlit UI. The app has 8 pages — after running it locally (see [Getting Started](#-getting-started)), drop screenshots into `docs/images/` and reference them here:
 
 ```markdown
-![Dashboard]([docs/images/dashboard.png](https://github.com/BootMerc/J-R-A-D/blob/main/docs/images/dashboard.png))
+![Dashboard](https://github.com/BootMerc/J-R-A-D/blob/main/docs/images/dashboard.png)
 ![Queue page](docs/images/queue.png)
 ![Facebook Assistant](docs/images/facebook-assistant.png)
 ![Analytics](docs/images/analytics.png)
