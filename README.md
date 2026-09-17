@@ -98,7 +98,7 @@ This README was written in an environment that can't run a real Windows/browser 
 
 ```markdown
 ![Dashboard](main/docs/images/dashboard.png)
-![Queue page](docs/images/queue.png)
+![Queue page](images/queue.png)
 ![Facebook Assistant](docs/images/facebook-assistant.png)
 ![Analytics](docs/images/analytics.png)
 ```
