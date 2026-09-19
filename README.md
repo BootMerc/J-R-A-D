@@ -90,11 +90,10 @@ These aren't mockups — they're the actual PNG files this project's `visual_gen
 The Arabic version is the harder engineering problem than it looks — see [Engineering Highlights](#-engineering-highlights) below for why Pillow's *automatic* Arabic text handling can't be trusted on Windows, and how this was actually verified rather than assumed.
 
 <details>
-<summary><b>📸 App screenshots — add your own here</b></summary>
+<summary><b>📸 App screenshots</b></summary>
 
 <br>
-
-This README was written in an environment that can't run a real Windows/browser session to capture the actual Streamlit UI. The app has 8 pages — after running it locally (see [Getting Started](#-getting-started)), drop screenshots into `docs/images/` and reference them here:
+The app has 8 pages — after running it locally (see [Getting Started](#-getting-started)), drop screenshots into `docs/images/` and reference them here:
 
 ![Dashboard](docs/images/dashboard.png)
 ![Queue page](docs/images/queue.png)
