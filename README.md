@@ -3,7 +3,7 @@
 # J-R-A-D  
 ## 📋 Jobs & Recruitment Automation Dashboard
 # STILL IN DEVELOPMENT
-### PHASE 11/14
+### PHASE 13/14
 
 **A locally-hosted tool that distributes job postings across Facebook, Telegram, and TikTok — automating what platforms actually let you automate, and honestly assisting with what they don't.**
 
@@ -149,3 +149,170 @@ graph TB
 ```
 
 Solid arrows (`==>`) are fully automated; dashed arrows (`-.->`) are the human-in-the-loop steps — deliberately, not as a limitation
+
+
+## 🔄 Post Lifecycle
+
+Every post moves through the same state machine regardless of platform — this is the actual `PostStatus` enum, not a simplification:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Draft: generate from template
+    Draft --> Queued: queue (staggered scheduling)
+    Queued --> Scheduled: opt into unattended sending
+    Scheduled --> Queued: unschedule
+    Queued --> Processing: Start / Send
+    Scheduled --> Processing: scheduler picks it up (Telegram)
+    Scheduled --> ManualActionRequired: due, but platform can't auto-send
+    Processing --> Posted: success
+    Processing --> Failed: error
+    Failed --> Queued: retry
+    Queued --> Skipped: skip
+    Processing --> Skipped: skip
+    Posted --> [*]
+    Skipped --> [*]
+
+    note right of Scheduled
+        Deliberately distinct from Queued —
+        Scheduled means "send this with
+        nobody watching." Not every
+        Queued post should default to it.
+    end note
+```
+
+`Queued` and `Scheduled` look similar but mean different things on purpose — a Queued post still wants a human to trigger it (or a one-click Send); Scheduled is an explicit opt-in to fully unattended sending. Collapsing the two would have been simpler and was deliberately rejected — see `PROJECT_STATUS.md` for the reasoning.
+
+---
+
+## 🧰 Tech Stack
+
+<div align="center">
+
+| Layer | Technology |
+|---|---|
+| **Backend** | ![FastAPI](https://img.shields.io/badge/-FastAPI-009688?logo=fastapi&logoColor=white) ![Pydantic](https://img.shields.io/badge/-Pydantic-e92063?logo=pydantic&logoColor=white) ![Uvicorn](https://img.shields.io/badge/-Uvicorn-499848) |
+| **Frontend** | ![Streamlit](https://img.shields.io/badge/-Streamlit-FF4B4B?logo=streamlit&logoColor=white) |
+| **Database** | ![SQLite](https://img.shields.io/badge/-SQLite-003B57?logo=sqlite&logoColor=white) ![SQLAlchemy](https://img.shields.io/badge/-SQLAlchemy-D71F00) |
+| **Scheduling** | ![APScheduler](https://img.shields.io/badge/-APScheduler-orange) |
+| **Imaging** | ![Pillow](https://img.shields.io/badge/-Pillow-8B4513) `arabic-reshaper` `python-bidi` |
+| **Integrations** | ![httpx](https://img.shields.io/badge/-httpx-0A9EDC) (Telegram Bot API) · `webbrowser` + `pyperclip` (Facebook) |
+| **Testing** | ![pytest](https://img.shields.io/badge/-pytest-0A9EDC?logo=pytest&logoColor=white) |
+
+</div>
+
+---
+
+## 🔍 Engineering Highlights
+
+Anyone can list features. What's more interesting is what went wrong along the way and how it got caught — every one of these is a real bug, found by actually running the code, not a hypothetical.
+
+<details>
+<summary><b>🔤 Arabic text was rendering broken on the one platform that matters — and it looked fine in testing</b></summary>
+
+<br>
+
+Pillow can render right-to-left Arabic script automatically via a layout engine called **raqm** — contextual letter joining, correct reading direction, all handled for you. It worked perfectly in this dev environment on the first try.
+
+The problem: **raqm depends on a system library (`libfribidi`) that Pillow's official Windows wheels don't bundle** — confirmed against a real GitHub issue, not assumed. This dev environment happened to have it (Linux); the actual deployment target (Windows) does not.
+
+The fix required *proving* the failure first: forcing Pillow's non-raqm layout engine and rendering the same Arabic string two ways side by side.
+
+| Without the fix (Windows' real behavior) | With the fix |
+|:---:|:---:|
+| Disconnected letters, reversed reading order | Correctly shaped and ordered |
+
+The real fix: manually reshape (`arabic_reshaper`) and bidi-reorder (`python-bidi`) Arabic text before drawing, and force the same non-raqm layout engine everywhere — so behavior is identical on every machine instead of silently depending on what happens to be installed.
+
+</details>
+
+<details>
+<summary><b>🔐 A dependency was leaking a bot token into the log file — and it had nothing to do with this project's own code</b></summary>
+
+<br>
+
+`httpx` logs every request's full URL at INFO level by default. Telegram's Bot API embeds the bot token directly in the URL (`.../bot{token}/sendMessage`). Nothing in this project's code ever logged a token directly — but `httpx`'s *own* internal logging inherited the app's log level, and quietly wrote every token straight into `logs/app.log` in plain text.
+
+Confirmed with a real (fake) token before the fix — it showed up in the log file. Fixed by explicitly setting `httpx`/`httpcore`'s loggers to `WARNING`. Confirmed again afterward that it was gone. A regression test was added later specifically because this fix initially shipped with **zero automated coverage** — caught during a dedicated hardening pass, and verified by temporarily reverting the fix and confirming the test actually failed before trusting it.
+
+</details>
+
+<details>
+<summary><b>💾 The backup tool could silently overwrite the exact backup you were trying to restore</b></summary>
+
+<br>
+
+`restore()` takes a safety backup of the *current* database before overwriting anything — a good idea that turned into a real bug: backup filenames only had second-level precision, so a safety backup taken within the same second as an earlier manual backup landed on the **identical filename**, silently replacing the very file being restored from with the current (pre-restore) state.
+
+Found by testing the restore flow end-to-end, not by inspecting the timestamp format. Fixed so a backup filename collision is now structurally impossible — a numeric suffix is appended whenever a naming collision would occur — rather than just "less likely."
+
+</details>
+
+<details>
+<summary><b>📊 Two different posts on the same day were silently overwriting each other's analytics</b></summary>
+
+<br>
+
+Metrics are logged manually and "upserted" by (job, destination, date) — resubmitting today's numbers should update, not duplicate. But a destination can reasonably have *two* posts on the same day (two tone variations, a retry after a skip), and the original upsert key didn't account for that: logging metrics for a second post on the same day silently overwrote the first post's numbers, including erasing which post they belonged to.
+
+Found via a real end-to-end test with two actual generated posts. Fixed by adding the specific post's ID to the upsert key.
+
+</details>
+
+---
+
+## 🧪 Testing
+
+**205 tests, all passing** — repository, service, and API layers for every feature, plus real (unmocked) file-generation tests for the image generator and backup/restore scripts.
+
+| Test file | Count | What it covers |
+|---|:---:|---|
+| `test_posts.py` | 75 | Post generation, Queue, Facebook Assistant, Telegram, TikTok, Scheduler |
+| `test_analytics.py` | 21 | Metrics logging, funnel/destination/template aggregation |
+| `test_templates.py` | 23 | Template rendering, preview, CRUD |
+| `test_destinations.py` | 20 | Destinations, tags, CSV import/export |
+| `test_jobs.py` | 16 | Job CRUD, search, archive |
+| `test_tiktok_visual.py` | 11 | Real Pillow image generation, Arabic reshape/bidi |
+| `test_telegram_bot.py` | 11 | Every real Telegram Bot API failure shape (401/403/429/timeout/malformed) |
+| `test_backup_restore.py` | 9 | Real file I/O, including the collision regression above |
+| `test_scheduler.py` | 7 | Due-post logic, fully decoupled from APScheduler's own timer |
+| `test_foundation.py` | 6 | Settings, schema, health check, the logging-fix regression above |
+
+Run them yourself:
+
+```bash
+pytest -q
+```
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone <your-repo-url>
+cd recruitment-automation
+setup.bat   # Windows: creates a venv, installs dependencies, initializes the database
+run.bat     # starts both servers and opens the dashboard
+```
+
+That's it — no Docker, no cloud account, no API keys required to start (Telegram needs a free bot token from [@BotFather](https://t.me/BotFather) if you want automatic sending).
+
+**Full instructions, every environment variable, and troubleshooting: [`docs/SETUP.md`](docs/SETUP.md).**
+
+---
+
+## 💰 What It Costs
+
+**$0**, verified feature by feature — not just asserted:
+
+| Feature | Cost | Why |
+|---|:---:|---|
+| Core app (Jobs, Destinations, Templates, Queue, Scheduler, Calendar) | $0 | Runs entirely on your own machine — SQLite + FastAPI + Streamlit |
+| Facebook | $0 | Your own logged-in browser session, no API, no ad spend |
+| Telegram | $0 | The Bot API has no paid tier |
+| TikTok | $0 | Local image generation + manual posting from your own account |
+| Analytics, Backup/Restore | $0 | Local storage and local file copies |
+
+The only place a real ongoing cost *could* enter is an optional, never-built AI-assisted content feature — entirely opt-in, not required for anything above.
+
+---
+
