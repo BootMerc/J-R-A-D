@@ -1,6 +1,8 @@
 <div align="center">
-<img src="docs/images/logo.jpg" alt="J-R-A-D Logo" width="250"/>    
-# J-R-A-D  
+
+<img src="docs/images/logo.jpg" alt="J-R-A-D Logo" width="250"/>
+
+# J-R-A-D
 ## 📋 Jobs & Recruitment Automation Dashboard
 # STILL IN DEVELOPMENT
 ### PHASE 13/14
