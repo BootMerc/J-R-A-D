@@ -318,3 +318,48 @@ The only place a real ongoing cost *could* enter is an optional, never-built AI-
 
 ---
 
+## 📈 Project Stats
+
+<div align="center">
+
+| | |
+|---|:---:|
+| **Phases planned & completed** | 14 / 14 |
+| **Lines of application code** | ~6,000 |
+| **Lines of test code** | ~3,700 |
+| **API endpoints** | 55 |
+| **Database tables** | 6 |
+| **Automated tests** | 205 |
+| **Real bugs found & fixed during development** | 5 |
+| **Platforms integrated** | 3 |
+| **Ongoing cost to run** | $0 |
+
+</div>
+
+---
+
+## 🗺️ Roadmap
+
+Everything in the original 14-phase plan is complete. These are genuine ideas for going further — not unfinished work:
+
+- [ ] **TikTok Content Posting API** — needs real app-audit approval from TikTok plus new OAuth token-storage schema
+- [ ] **AI-assisted post rewriting/translation** — settings for this exist but nothing uses them yet
+- [ ] **Multi-user / remote access** — would need real authentication first; this is a local, single-user tool by design today
+- [ ] **Automatic scheduled backups** — currently manual (`backup.bat`) by design; Windows Task Scheduler is the low-effort path if wanted
+
+See [`PROJECT_STATUS.md`](PROJECT_STATUS.md) for the full reasoning behind each.
+
+---
+
+## 📄 License
+
+_Add a license here before publishing — [MIT](https://choosealicense.com/licenses/mit/) is a common choice for portfolio projects if you're not sure._
+
+---
+
+<div align="center">
+
+Built phase by phase, with a real test suite and a real bug list — not a demo.
+
+</div>
+
