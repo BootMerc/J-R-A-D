@@ -15,7 +15,7 @@
 [![Tests](https://img.shields.io/badge/tests-30(so%20far)%20passing-brightgreen)](docs/SETUP.md#running-tests)
 [![Cost](https://img.shields.io/badge/cost-%240-success)](#-what-it-costs)
 
-[Overview](#-overview) • [Features](#-features) • [Screenshots](#-Screenshots) • [Architecture](#-architecture) • [Engineering Highlights](#-engineering-highlights) • [Getting Started](#-getting-started)
+[Overview](#-overview) • [Features](#-features) • [Screenshots](#-screenshots) • [Architecture](#-architecture) • [Engineering Highlights](#-engineering-highlights) • [Getting Started](#-getting-started)
 
 </div>
 <div align="center">
