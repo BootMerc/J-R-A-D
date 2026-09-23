@@ -1,10 +1,9 @@
-"""Request/response schemas for the Destinations API.
-
-`tags` is a plain list[str] on the wire in both directions — the ORM's
-list[Tag] gets converted to names by the field_validator below on the way
-out, and the service/repository resolve names back to Tag rows on the way
-in. Callers never see a Tag object.
-"""
+# Request/response schemas for the Destinations API.
+#
+# tags is just a list of strings in the API. ORM Tag objects are converted
+# to tag names when returning a response, while the service/repository
+# resolves those names back to Tag rows when receiving a request.
+# API callers never need to deal with Tag objects directly.
 
 from datetime import datetime
 from typing import Optional
