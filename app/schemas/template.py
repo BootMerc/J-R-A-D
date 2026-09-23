@@ -1,11 +1,9 @@
-"""Request/response schemas for the Templates API.
-
-TemplateRead.unknown_variables is a computed field (not a DB column) — it
-runs template_rendering.unknown_variables() on every response, so a typo'd
-{{variable}} shows up as a warning immediately on create/edit/list, not
-only when someone happens to preview that specific template.
-"""
-
+# Request/response schemas for the Templates API.
+#
+# TemplateRead.unknown_variables is a computed field, not a database column.
+# It checks the template for unknown {{variables}} on every response, so
+# mistakes are shown immediately when a template is created, edited, or listed
+# instead of only appearing during preview.
 from datetime import datetime
 from typing import Optional
 
