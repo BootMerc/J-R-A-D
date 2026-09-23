@@ -347,19 +347,9 @@ Everything in the original 14-phase plan is complete. These are genuine ideas fo
 - [ ] **Multi-user / remote access** — would need real authentication first; this is a local, single-user tool by design today
 - [ ] **Automatic scheduled backups** — currently manual (`backup.bat`) by design; Windows Task Scheduler is the low-effort path if wanted
 
-See [`PROJECT_STATUS.md`](PROJECT_STATUS.md) for the full reasoning behind each.
 
 ---
 
-## 📄 License
-
-_Add a license here before publishing — [MIT](https://choosealicense.com/licenses/mit/) is a common choice for portfolio projects if you're not sure._
-
----
-
-<div align="center">
-
-Built phase by phase, with a real test suite and a real bug list — not a demo.
 
 </div>
 
