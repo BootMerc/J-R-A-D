@@ -1,10 +1,10 @@
-"""Request/response schemas for the Jobs API.
-
-JobCreate has no status/archived fields — every new job starts as an
-unarchived Draft (see JobService.create). JobUpdate exposes both, since
-editing is the general-purpose path for status transitions beyond the
-dedicated close/archive quick actions.
-"""
+# Request/response schemas for the Jobs API.
+#
+# JobCreate doesn't include status or archived fields because every new job
+# starts as an unarchived Draft through JobService.create().
+#
+# JobUpdate includes both fields so it can handle general status and archive
+# changes, in addition to the dedicated close/archive actions.
 
 from datetime import datetime
 from typing import Optional
