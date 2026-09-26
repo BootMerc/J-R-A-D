@@ -1,9 +1,10 @@
-"""Jobs page — create, edit, search/filter, duplicate, close, archive.
-
-Streamlit auto-discovers this in the sidebar as "Jobs" (the "1_" prefix
-just controls ordering). Talks to the backend only through
-frontend/components/api_client.py — no direct database access from here.
-"""
+# Jobs page — create, edit, search/filter, duplicate, close, and archive jobs.
+#
+# Streamlit shows this page in the sidebar as "Jobs". The "1_" prefix only
+# controls its position in the sidebar.
+#
+# All backend communication goes through frontend/components/api_client.py.
+# This page never accesses the database directly.
 
 import sys
 from pathlib import Path
