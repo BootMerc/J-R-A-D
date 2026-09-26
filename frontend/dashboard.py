@@ -1,12 +1,10 @@
-"""Streamlit dashboard — landing page.
-
-Run with: streamlit run frontend/dashboard.py
-(run.bat does this for you)
-
-Shows quick counts and API connectivity. Actual feature pages (Jobs,
-Destinations, Templates, ...) live in frontend/pages/ — see
-PROJECT_STATUS.md for what's built and what's still ahead.
-"""
+# Streamlit dashboard — landing page.
+#
+# Run with: streamlit run frontend/dashboard.py
+# (run.bat does this for you)
+#
+# Shows quick counts and checks API connectivity. The actual feature pages
+# (Jobs, Destinations, Templates, etc.) are in frontend/pages/.
 
 import sys
 from pathlib import Path
