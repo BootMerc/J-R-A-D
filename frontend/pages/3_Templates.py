@@ -1,9 +1,8 @@
-"""Templates page — create, edit, search/filter, activate/deactivate,
-delete, and a live preview of {{variable}} rendering against a real job.
-
-Same pattern as the Jobs/Destinations pages: talks to the backend only
-through frontend/components/api_client.py.
-"""
+# Templates page — create, edit, search/filter, activate/deactivate,
+# delete templates, and preview {{variable}} rendering with a real job.
+#
+# Like the Jobs and Destinations pages, all backend communication goes
+# through frontend/components/api_client.py. No direct database access here.
 
 import sys
 from pathlib import Path
