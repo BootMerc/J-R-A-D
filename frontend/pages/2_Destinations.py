@@ -1,9 +1,8 @@
-"""Destinations page — create, edit, search/filter, tags, CSV import/
-export, activate/deactivate, delete.
-
-Same pattern as frontend/pages/1_Jobs.py: talks to the backend only through
-frontend/components/api_client.py.
-"""
+# Destinations page — create, edit, search/filter, manage tags, import/export
+# CSV files, activate/deactivate, and delete destinations.
+#
+# Like the Jobs page, all backend communication goes through
+# frontend/components/api_client.py. No direct database access here.
 
 import sys
 from pathlib import Path
