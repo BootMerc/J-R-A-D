@@ -4,8 +4,7 @@
 
 # J-R-A-D
 ## 📋 Jobs & Recruitment Automation Dashboard
-# STILL IN DEVELOPMENT
-### PHASE 13/14
+### PHASE 14/14
 
 **A locally-hosted tool that distributes job postings across Facebook, Telegram, and TikTok — automating what platforms actually let you automate, and honestly assisting with what they don't.**
 
