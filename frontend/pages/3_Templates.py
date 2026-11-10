@@ -1,8 +1,21 @@
+<<<<<<< Updated upstream
 # Templates page — create, edit, search/filter, activate/deactivate,
 # delete templates, and preview {{variable}} rendering with a real job.
 #
 # Like the Jobs and Destinations pages, all backend communication goes
 # through frontend/components/api_client.py. No direct database access here.
+=======
+# Post Creator page — generate post content from jobs, destinations, and
+# templates, then compare, edit, and delete the generated posts.
+#
+# Generated content is shown in st.code() blocks, which provide a built-in
+# copy button for Section 40. This is separate from Phase 7's pyperclip
+# integration, which copies content to the OS clipboard for the Facebook
+# Assistant workflow.
+#
+# Like the other pages, all backend communication goes through
+# frontend/components/api_client.py.
+>>>>>>> Stashed changes
 
 import sys
 from pathlib import Path

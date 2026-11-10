@@ -32,11 +32,6 @@ try:
 except APIError:
     destinations_list = []
 try:
-    # Inclusive of inactive destinations (unlike destinations_list above,
-    # which stays active-only since you shouldn't queue new posts against
-    # an inactive one) — Phase 8 needs the real platform even for a post
-    # queued against a destination that's since been deactivated, so it
-    # still shows "Send" instead of silently falling back to "Start".
     all_destinations_list = get("/destinations", params={"limit": 500})["items"]
 except APIError:
     all_destinations_list = []
@@ -60,6 +55,24 @@ st.caption(
 
 if jobs_list and destinations_list:
     q_job_label = st.selectbox("Job", list(job_options.keys()), key="queue_job")
+
+    # --- Platform quick-select buttons ---
+    available_platforms = sorted(list(set(d["platform"] for d in destinations_list)))
+    if available_platforms:
+        st.caption("Quick select destinations by platform:")
+        plat_cols = st.columns(len(available_platforms) + 1)
+        for idx, plat in enumerate(available_platforms):
+            if plat_cols[idx].button(f"Select all {plat}", key=f"sel_plat_{plat}", use_container_width=True):
+                st.session_state["queue_dests"] = [
+                    f"{d['name']} ({d['platform']})"
+                    for d in destinations_list
+                    if d["platform"] == plat
+                ]
+                st.rerun()
+        if plat_cols[-1].button("Clear selection", key="clear_plat_dests", use_container_width=True):
+            st.session_state["queue_dests"] = []
+            st.rerun()
+
     q_dest_labels = st.multiselect("Destinations", list(dest_options.keys()), key="queue_dests")
 
     template_mode = st.radio(
@@ -132,11 +145,6 @@ else:
     job_titles_by_id = {j["id"]: j["title"] for j in jobs_list}
     dest_labels_by_id = {d["id"]: f"{d['name']} ({d['platform']})" for d in destinations_list}
 
-    # --- Bulk action: queue every draft above in one click, staggered the
-    # same way "Create a queue" staggers a fresh batch — so bulk-promoting
-    # 50 drafts doesn't schedule all 50 for the exact same instant, which
-    # would be poor practice for the same spam-protection reasons
-    # create_queue() already cares about (see PROJECT_STATUS.md section 19).
     st.caption(f"{len(draft_posts)} draft{'s' if len(draft_posts) != 1 else ''} waiting")
     bulk_col1, bulk_col2 = st.columns(2)
     bulk_start_now = bulk_col1.checkbox("Start now", value=True, key="bulk_queue_start_now")
@@ -159,9 +167,6 @@ else:
                 post(f"/posts/{draft['id']}/queue", json={"scheduled_at": scheduled_at.isoformat()})
                 succeeded += 1
             except APIError as exc:
-                # Never let one bad draft stop the rest — same "never
-                # silently fail the whole batch" rule create_queue() and
-                # CSV import already follow elsewhere in this project.
                 failed.append(f"Draft #{draft['id']}: {exc}")
         if succeeded:
             st.success(f"Queued {succeeded} post(s).")
@@ -254,12 +259,6 @@ for item in queue_items:
             PostStatus.POSTED.value,
             PostStatus.SKIPPED.value,
         ):
-            # Phase 9: TikTok defaults to a manual workflow (no audited API
-            # access for most users — see PROJECT_STATUS.md section 14), so
-            # the only thing automatable here is preparing the recruitment
-            # graphic itself. Posting it and resolving the outcome is the
-            # generic Processing-row actions below, same as any other
-            # manually-completed post.
             if item.get("media_path"):
                 st.image(item["media_path"], caption="Generated visual", width=220)
                 visual_button_label = "Regenerate visual"
@@ -277,11 +276,6 @@ for item in queue_items:
 
         if item["status"] == PostStatus.QUEUED.value:
             if dest_platform_by_id.get(item["destination_id"]) == "Telegram":
-                # Phase 8: Telegram needs no human step, so "Send" does the
-                # whole thing (Start + the real Bot API call + resolve to
-                # Posted/Failed) in one click, unlike the generic "Start"
-                # below which only flips the status and waits for
-                # something else to finish the job.
                 if c1.button("Send", key=f"send_telegram_{item['id']}"):
                     try:
                         with st.spinner("Sending via Telegram..."):
@@ -296,12 +290,6 @@ for item in queue_items:
                 except APIError as exc:
                     st.error(str(exc))
         elif item["status"] == PostStatus.PROCESSING.value:
-            # Phase 9: the generic escape hatch flagged back in Phase 7's
-            # design notes — a Processing post with no dedicated assistant
-            # page (TikTok's MANUAL workflow, or any post someone Started
-            # by hand) needs *some* way to record what actually happened.
-            # Reuses the same mark-posted/mark-failed endpoints the
-            # Facebook Assistant and Telegram send already call.
             if c1.button("Mark Posted", key=f"mark_posted_{item['id']}"):
                 try:
                     post(f"/posts/{item['id']}/mark-posted")
@@ -348,10 +336,6 @@ for item in queue_items:
                     st.error(str(exc))
 
         if item["status"] == PostStatus.QUEUED.value:
-            # Phase 10: opting a post into unattended sending is a
-            # separate, explicit choice from Queued itself — see
-            # PROJECT_STATUS.md section 14. Only offered when there's a
-            # scheduled_at time for the ticker to compare against.
             if item.get("scheduled_at") and c5.button("Schedule", key=f"schedule_{item['id']}"):
                 try:
                     post(f"/posts/{item['id']}/schedule")
